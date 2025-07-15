@@ -22,6 +22,11 @@ def main():
     x, y = load_and_preprocess_data()
 
     print("Splitting data into train/test sets...")
+
+    # Save the preprocessed dataset
+    os.makedirs("data/processed", exist_ok=True)
+    joblib.dump((x, y), "data/processed/secom_scaled.pkl")
+
     x_train, x_test, y_train, y_test = train_test_split(
         x, y, test_size=0.2, stratify=y, random_state=42
     )
