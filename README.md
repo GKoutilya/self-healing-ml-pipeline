@@ -24,33 +24,6 @@ The system is designed for continuous learning in production environments, ensur
 
 ---
 
-## Project Structure
-
-```
-
-.
-├── app
-│   ├── main.py                  # FastAPI app and inference endpoints
-│   ├── model\_loader.py          # Model loading utilities
-│   └── schemas.py               # Pydantic schemas for request/response validation
-├── monitoring
-│   ├── data\_logger.py           # Logging predictions and input features
-│   ├── drift\_monitor
-│   │   └── drift\_monitor.py     # Drift detection script using Wasserstein distance
-│   └── inference\_log.csv        # Logged predictions (auto-generated)
-├── training
-│   └── retraining\_pipeline.py  # Model retraining logic and versioning
-├── models
-│   ├── model\_v1.pkl             # Current model file
-│   ├── model\_metadata.json      # Metadata about the model (version, accuracy, etc.)
-│   └── model\_v{timestamp}.pkl   # Archived model versions
-├── requirements.txt             # Python dependencies
-└── README.md                   # This file
-
-````
-
----
-
 ## Getting Started
 
 ### Prerequisites
@@ -65,7 +38,7 @@ The system is designed for continuous learning in production environments, ensur
    ```bash
    git clone https://github.com/yourusername/your-repo-name.git
    cd your-repo-name
-```
+   ```
 
 2. Install dependencies:
 
