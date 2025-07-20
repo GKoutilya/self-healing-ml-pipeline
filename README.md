@@ -16,12 +16,12 @@ This project is a full-stack **MLOps pipeline** built around the SECOM dataset f
 
 ## 🧩 Features
 
-✅ FastAPI server for serving predictions
-✅ Streamlit dashboard for model insights and manual retraining
-✅ Drift detection with customizable thresholds
-✅ Auto-triggered or manual retraining based on logged inference data
-✅ Model versioning and metadata stored in `models/`
-✅ Modular, extensible, and production-ready codebase
+- ✅ FastAPI server for serving predictions
+- ✅ Streamlit dashboard for model insights and manual retraining
+- ✅ Drift detection with customizable thresholds
+- ✅ Auto-triggered or manual retraining based on logged inference data
+- ✅ Model versioning and metadata stored in `models/`
+- ✅ Modular, extensible, and production-ready codebase
 
 ---
 
