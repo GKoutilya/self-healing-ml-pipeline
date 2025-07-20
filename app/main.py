@@ -9,13 +9,13 @@ from app.model_loader import load_model
 from app.schemas import InferenceRequest, InferenceResponse
 from monitoring.data_logger import log_prediction
 
-# ==== FastAPI App ====
+# FastAPI App Title
 app = FastAPI(title="SECOM Fault Classifier")
 
-# ==== Load Model ====
+# Calling a helper function to load the trained model from the disk using joblib
 model = load_model()
 
-# ==== Load Metadata ====
+# Load the metadata for the models which include model_version, n_features, accuracy, and timestamp
 METADATA_PATH = "models/model_metadata.json"
 if os.path.exists(METADATA_PATH):
     with open(METADATA_PATH, "r") as f:
@@ -23,24 +23,23 @@ if os.path.exists(METADATA_PATH):
 else:
     model_metadata = {"model_version": "unknown", "n_features": None, "accuracy": None}
 
-# ==== Schemas ====
+# Schema for Prediction Input
 class PredictionInput(BaseModel):
     features: List[float]
 
-# ==== Routes ====
-@app.get("/")
+@app.get("/") # Welcome message or test route
 def root():
     return {"message": "ML Inference API is running."}
 
-@app.get("/health")
+@app.get("/health") # Health check endpoint for uptime monitoring
 def health():
     return {"status": "ok"}
 
-@app.get("/version")
+@app.get("/version") # Returns current model version
 def model_version():
     return {"model_version": model_metadata.get("model_version", "unknown")}
 
-@app.get("/model-info")
+@app.get("/model-info") # Returns model metadata. Useful for debugging, CI/CD and dashboards
 def model_info():
     return {
         "model_version": model_metadata.get("model_version", "unknown"),
@@ -49,9 +48,10 @@ def model_info():
         "n_features": model_metadata.get("n_features", "unknown"),
     }
 
-@app.post("/predict", response_model=InferenceResponse)
+@app.post("/predict", response_model=InferenceResponse) # Handles POST requests with the JSON payload
 def predict(input: PredictionInput):
     try:
+        # Extract Input
         features = input.features
         features_array = np.array(features).reshape(1, -1)
 
@@ -59,21 +59,23 @@ def predict(input: PredictionInput):
         print(f"[DEBUG] Feature array shape: {features_array.shape}")
         print(f"[DEBUG] Model expects {model.n_features_in_} features.")
 
+        # Sanity check on feature count
         if hasattr(model, "n_features_in_") and len(features) != model.n_features_in_:
             raise ValueError(f"Model expects {model.n_features_in_} features, got {len(features)}")
 
-        # Call model
+        # Model Inference
         proba = model.predict_proba(features_array)[0]
         probability = proba[1] if len(proba) == 2 else proba[0]
         prediction = int(probability >= 0.5)
 
         print(f"[DEBUG] Probability: {probability}, Prediction: {prediction}")
 
-        # Optional: log prediction
+        # Logging
         log_prediction(features_array.tolist(), prediction, probability, model_metadata.get("model_version", "unknown"))
 
         return {"prediction": prediction, "probability": probability}
-
+    
+    # Error Handling
     except Exception as e:
         import traceback
         print("[ERROR] Prediction failed:")

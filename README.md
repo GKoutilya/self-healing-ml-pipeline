@@ -1,182 +1,197 @@
-# Scalable ML Deployment + Drift Monitoring + Auto-Retraining MLOps Pipeline
+# 🚀 Scalable MLOps Pipeline: Real-Time Inference, Drift Monitoring & Auto-Retraining
 
-## Overview
+## 🔍 Overview
 
-This project implements a scalable Machine Learning Operations (MLOps) pipeline for a fault classification problem using the SECOM dataset. The pipeline includes:
+This project is a full-stack **MLOps pipeline** built around the SECOM dataset for fault classification. It supports continuous model improvement and reliable deployment through:
 
-- **FastAPI-based inference API** for real-time predictions.
-- **Prediction logging** to track incoming inference data.
-- **Data drift monitoring** using the Wasserstein distance to detect feature distribution shifts.
-- **Automated model retraining** triggered when significant drift is detected.
-- **Model versioning and metadata management** for reproducibility and auditability.
+* 🧠 Real-time inference via a **FastAPI** service
+* 📈 **Streamlit dashboard** for drift monitoring, retraining, and model metadata visualization
+* 📦 Drift detection using **Wasserstein Distance**
+* 🔁 Automated **model retraining** pipeline upon drift detection
+* 🗃️ Full **model versioning** and metadata logging
 
-The system is designed for continuous learning in production environments, ensuring model robustness against evolving data distributions.
-
----
-
-## Features
-
-- **FastAPI Inference Service**: Serve your ML model with an easy-to-use REST API.
-- **Logging**: Persist inference data, predictions, probabilities, and timestamps for monitoring.
-- **Drift Detection**: Monitor input data for distribution shifts using statistical distance metrics.
-- **Auto-Retraining Pipeline**: Retrain and evaluate the model automatically upon drift detection.
-- **Version Control**: Save new model versions and update metadata seamlessly.
+> Ideal for projects that demand scalable ML deployment with continuous learning and observability.
 
 ---
 
-## Getting Started
+## 🧩 Features
 
-### Prerequisites
-
-- Python 3.10+
-- Pip
-
-### Installation
-
-1. Clone the repo:
-
-   ```bash
-   git clone https://github.com/yourusername/your-repo-name.git
-   cd your-repo-name
-   ```
-
-2. Install dependencies:
-
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. Start the FastAPI server:
-
-   ```bash
-   uvicorn app.main:app --reload
-   ```
-
-4. The API will be accessible at: `http://127.0.0.1:8000`
+✅ FastAPI server for serving predictions
+✅ Streamlit dashboard for model insights and manual retraining
+✅ Drift detection with customizable thresholds
+✅ Auto-triggered or manual retraining based on logged inference data
+✅ Model versioning and metadata stored in `models/`
+✅ Modular, extensible, and production-ready codebase
 
 ---
 
-## Usage
+## ⚙️ Setup
 
-### Inference API
+### 🔧 Prerequisites
 
-* **Health Check**
+* Python 3.10+
+* Pip
 
-  ```
-  GET /
-  ```
+### 🛠️ Installation
 
-  Returns a basic message indicating the API is running.
-
-* **Model Version**
-
-  ```
-  GET /version
-  ```
-
-  Returns the current model version.
-
-* **Make Prediction**
-
-  ```
-  POST /predict
-  Content-Type: application/json
-
-  {
-    "features": [0.1, 0.2, 0.3, ..., 0.n]
-  }
-  ```
-
-  Response:
-
-  ```json
-  {
-    "prediction": 0,
-    "probability": 0.123
-  }
-  ```
+```bash
+git clone https://github.com/yourusername/your-repo-name.git
+cd your-repo-name
+pip install -r requirements.txt
+```
 
 ---
 
-### Drift Monitoring
+## 🚀 Run the Services
 
-Run the drift monitor script to analyze feature distribution changes against baseline data:
+### ✅ FastAPI Inference API
+
+```bash
+uvicorn app.main:app --reload
+```
+
+📍 Access at: `http://127.0.0.1:8000`
+
+---
+
+### 📊 Streamlit Monitoring Dashboard
+
+```bash
+streamlit run dashboard.py
+```
+
+Use this dashboard to:
+
+* Monitor data drift visually
+* Inspect inference logs
+* Trigger model retraining
+* View current model metadata
+
+---
+
+## 🔮 Inference API Usage
+
+### 🔎 Health Check
+
+```http
+GET /
+```
+
+### 📦 Model Version Info
+
+```http
+GET /version
+```
+
+### 📈 Make Prediction
+
+```http
+POST /predict
+Content-Type: application/json
+
+{
+  "features": [0.1, 0.2, 0.3, ..., 0.n]
+}
+```
+
+**Response**:
+
+```json
+{
+  "prediction": 0,
+  "probability": 0.913
+}
+```
+
+---
+
+## 📉 Drift Detection
+
+Run the drift monitor to compare the most recent data distribution with baseline training data:
 
 ```bash
 python monitoring/drift_monitor/drift_monitor.py
 ```
 
-If drift is detected, the retraining pipeline will automatically be triggered.
+If drift exceeds a threshold, a message will indicate that retraining is needed.
 
 ---
 
-### Retraining Pipeline
+## 🔁 Model Retraining
 
-The retraining pipeline:
-
-* Loads the latest training data.
-* Retrains the model.
-* Evaluates and prints classification metrics.
-* Saves the updated model with a new version number.
-* Updates model metadata in JSON.
-
-Run manually or trigger automatically by the drift monitor.
+Automatically triggered by drift monitor or manually via Streamlit UI.
 
 ```bash
 python training/retraining_pipeline.py
 ```
 
+Performs:
+
+* Preprocessing & validation
+* Model training & evaluation
+* Versioned model saving
+* Metadata update
+
+Model artifacts and metadata are saved to `models/`.
+
 ---
 
-## Logging
+## 🧾 Inference Logging
 
-Inference requests and predictions are logged in:
+All incoming inference data is logged to:
 
 ```
 monitoring/inference_log.csv
 ```
 
-Logged data includes:
+Each log includes:
 
-* Timestamp (UTC)
+* Timestamp
 * Input features
-* Model prediction
-* Prediction probability
-* Model version used
+* Prediction and probability
+* Model version
 
 ---
 
-## Model Versioning
+## 🧠 Model Metadata
 
-Model files and metadata are stored in the `models/` directory. The metadata JSON tracks:
+Saved in:
+
+```
+models/model_metadata.json
+```
+
+Tracks:
 
 * Model version
-* Training timestamp
-* Model accuracy
+* Accuracy on validation set
+* Training timestamp (UTC)
 * Number of features
 
 ---
 
-## Future Improvements
+## 🚧 Future Enhancements
 
-* Integrate advanced drift detection metrics (e.g., KL divergence, population stability index).
-* Add alerting via email/SMS when drift is detected.
-* Containerize the API and pipeline for cloud deployment.
-* Add automated testing and CI/CD integration.
-* Support multi-model deployment with blue/green model switching.
-
----
-
-## License
-
-This project is licensed under the MIT License.
+* 📬 Alerting via email/SMS on drift
+* 🐳 Dockerize entire pipeline
+* ☁️ Deploy with autoscaling (Render, Hugging Face Spaces, or AWS)
+* 🔁 Schedule retraining jobs with CRON or Airflow
+* ✅ CI/CD for model validation and deployment
 
 ---
 
-## Contact
+## 📜 License
 
-Created by Koutilya Ganapathiraju. Feel free to reach out:
+This project is licensed under the **MIT License**.
 
-- **Email:** [gkoutilyaraju@gmail.com](gkoutilyaraju@gmail.com)  
-- **GitHub:** [GitHub](https://github.com/GKoutilya)  
-- **LinkedIn:** [LinkedIn](https://linkedin.com/in/koutilya-ganapathiraju-0a3350182)
+---
+
+## 👤 Author
+
+Created by **Koutilya Ganapathiraju**
+
+* 📧 Email: [gkoutilyaraju@gmail.com](mailto:gkoutilyaraju@gmail.com)
+* 🧑‍💻 GitHub: [@GKoutilya](https://github.com/GKoutilya)
+* 💼 LinkedIn: [Koutilya Ganapathiraju](https://linkedin.com/in/koutilya-ganapathiraju-0a3350182)
+
+---
