@@ -10,9 +10,9 @@ This project is a full-stack **MLOps pipeline** built around the SECOM dataset f
 * 🔁 Automated **model retraining** pipeline upon drift detection
 * 🗃️ Full **model versioning** and metadata logging
 
-> **Note:** The initial model is trained offline using the SECOM dataset. However, the inference API expects input features that can be self-generated/synthetic, which the system uses for prediction and drift monitoring.
+**Note:** The initial model is trained offline using the SECOM dataset. However, the inference API expects input features that can be self-generated/synthetic, which the system uses for prediction and drift monitoring.
 
-Ideal for projects that demand scalable ML deployment with continuous learning and observability.
+> Ideal for projects that demand scalable ML deployment with continuous learning and observability.
 
 ---
 
