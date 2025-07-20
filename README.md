@@ -4,21 +4,23 @@
 
 This project is a full-stack **MLOps pipeline** built around the SECOM dataset for fault classification. It supports continuous model improvement and reliable deployment through:
 
-* 🧠 Real-time inference via a **FastAPI** service
+* 🧠 Real-time inference via a **FastAPI** service (using self-generated/synthetic input data during runtime)
 * 📈 **Streamlit dashboard** for drift monitoring, retraining, and model metadata visualization
 * 📦 Drift detection using **Wasserstein Distance**
 * 🔁 Automated **model retraining** pipeline upon drift detection
 * 🗃️ Full **model versioning** and metadata logging
 
-> Ideal for projects that demand scalable ML deployment with continuous learning and observability.
+> **Note:** The initial model is trained offline using the SECOM dataset. However, the inference API expects input features that can be self-generated/synthetic, which the system uses for prediction and drift monitoring.
+
+Ideal for projects that demand scalable ML deployment with continuous learning and observability.
 
 ---
 
 ## 🧩 Features
 
-- ✅ FastAPI server for serving predictions
+- ✅ FastAPI server for serving predictions (with self-generated input data)
 - ✅ Streamlit dashboard for model insights and manual retraining
-- ✅ Drift detection with customizable thresholds
+- ✅ Drift detection with customizable thresholds based on inference input
 - ✅ Auto-triggered or manual retraining based on logged inference data
 - ✅ Model versioning and metadata stored in `models/`
 - ✅ Modular, extensible, and production-ready codebase
@@ -38,7 +40,7 @@ This project is a full-stack **MLOps pipeline** built around the SECOM dataset f
 git clone https://github.com/yourusername/your-repo-name.git
 cd your-repo-name
 pip install -r requirements.txt
-```
+````
 
 ---
 
@@ -62,8 +64,8 @@ streamlit run dashboard.py
 
 Use this dashboard to:
 
-* Monitor data drift visually
-* Inspect inference logs
+* Monitor data drift visually based on inference logs
+* Inspect inference data and predictions (self-generated inputs)
 * Trigger model retraining
 * View current model metadata
 
@@ -103,11 +105,13 @@ Content-Type: application/json
 }
 ```
 
+> **Note:** The inference API uses self-generated/synthetic feature inputs during runtime, which differ from the original SECOM training data.
+
 ---
 
 ## 📉 Drift Detection
 
-Run the drift monitor to compare the most recent data distribution with baseline training data:
+Run the drift monitor to compare the most recent inference input data distribution with baseline training data from SECOM:
 
 ```bash
 python monitoring/drift_monitor/drift_monitor.py
@@ -127,7 +131,7 @@ python training/retraining_pipeline.py
 
 Performs:
 
-* Preprocessing & validation
+* Preprocessing & validation on SECOM dataset or updated data
 * Model training & evaluation
 * Versioned model saving
 * Metadata update
@@ -147,7 +151,7 @@ monitoring/inference_log.csv
 Each log includes:
 
 * Timestamp
-* Input features
+* Input features (self-generated/synthetic during runtime)
 * Prediction and probability
 * Model version
 
@@ -164,7 +168,7 @@ models/model_metadata.json
 Tracks:
 
 * Model version
-* Accuracy on validation set
+* Accuracy on validation set (SECOM data)
 * Training timestamp (UTC)
 * Number of features
 
